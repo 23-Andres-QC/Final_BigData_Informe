@@ -793,7 +793,7 @@ Los 3 avisos corresponden a los datos: (a) \texttt{gold\_edificios} repite 379 i
   \item La amplificación se ajusta con 49 estaciones, y $F(T,\vs)$ no es monótona.
   \item La altura 2.5D tiene 4~m de resolución efectiva: 244\,736 edificios (7.8\,\%) no tienen altura y los pisos de los edificios altos se subestiman.
   \item La tipología se asigna con el censo distrital y los pisos, sin catastro, y $T_b=h/C_T$ es una aproximación normativa.
-  \item \texttt{gold\_edificios} repite 4\,969 identificadores (14\,943 filas, 0.48\,\%), incluidos en el conteo de 3\,124\,035 edificios; la tarea 11 los cuenta más de una vez en \texttt{sismo\_dano\_edificios}, con 3\,184\,347 filas por sismo.
+  \item \texttt{gold\_edificios} repite 4\,969 identificadores (14\,943 filas, 0.48\,\%), incluidos en el conteo de 3\,124\,035 edificios; \texttt{riesgo\_perfiles} y \texttt{sismo\_dano\_edificios} los cuentan más de una vez, con 3\,184\,347 edificios en total y por sismo.
   \item El área no incluye Pueblo Libre ni Mi Perú.
   \item En Turquía, la etiqueta visual de daño y el nivel del estudio de origen se contradicen por zonas en Antakya, y el ShakeMap tiene cerca de 1~km de resolución.
   \item Cada lote de 10~s de señal tarda unos 80~s en procesarse en Spark.
