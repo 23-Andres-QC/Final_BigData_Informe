@@ -31,6 +31,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{multirow}
+\usepackage{caption}
 \usepackage{makecell}
 \usepackage{adjustbox}
 \usepackage{array}
@@ -167,37 +168,11 @@ Esta relación se evalúa considerando las
 limitaciones de los datos disponibles
 y de los modelos utilizados.
 
-El principal aporte del trabajo es una
-cadena de procesamiento trazable que
-integra fuentes heterogéneas mediante
-tecnologías de Big Data y conecta la
-caracterización de la amenaza sísmica,
-las condiciones locales del suelo y
-la vulnerabilidad de las edificaciones.
-Los resultados se orientan a apoyar
-el análisis territorial y la priorización
-de estudios más detallados, sin sustituir
-las evaluaciones estructurales realizadas
-por especialistas.
-
-El documento se organiza en las siguientes
-secciones: el estado del arte presenta
-los antecedentes relevantes; la propuesta
-metodológica describe las fuentes de datos,
-el fundamento físico y la arquitectura;
-la metodología implementada detalla
-el procesamiento y los modelos; los
-resultados analizan su desempeño y
-limitaciones; y las conclusiones sintetizan
-los principales hallazgos.
-
 
 % =====================================================================
 \section{Estado del arte}\label{sec:estado}
 % =====================================================================
-Se revisaron seis trabajos que abordan, desde distintos ángulos, los componentes del sistema propuesto: la extracción automática de características de edificaciones a partir de imágenes \cite{carpanese2023}, la estimación de la vulnerabilidad sísmica con teledetección y aprendizaje automático \cite{fan2021plsv}, la evaluación de daño con imágenes satelitales antes y después de un desastre \cite{gupta2019xbd}, y el procesamiento escalable de ondas sísmicas en lote y en tiempo real 
-\cite{zhu2022quakeflow,izquierdo2022pisco,wang2023amp}.
- La Tabla~\ref{tab:comparativa} resume la comparación.
+Se revisaron seis trabajos que abordan, desde distintos ángulos, los componentes del sistema propuesto: la extracción automática de características de edificaciones a partir de imágenes \cite{carpanese2023}, la estimación de la vulnerabilidad sísmica con teledetección y aprendizaje automático \cite{fan2021plsv}, la evaluación de daño con imágenes satelitales antes y después de un desastre \cite{gupta2019xbd}, el procesamiento escalable de ondas sísmicas en lote y en tiempo real \cite{zhu2022quakeflow}, la predicción de la amplificación del suelo con aprendizaje automático \cite{wang2023amp} y la evaluación del riesgo sísmico con Random Forest en una ciudad peruana \cite{izquierdo2022pisco}.
 
 % ---------------------------------------------------------------------
 \subsection{Automatic identification of residential building features using machine learning techniques (Carpanese et al., 2023)}
@@ -407,7 +382,8 @@ Se revisaron seis trabajos que abordan, desde distintos ángulos, los componente
 \fuente{Wang et al. \cite{wang2023amp}.}
 \end{figure}
 
-\textbf{Aporte a la investigación:} Este trabajo demuestra la utilidad de los modelos basados en árboles para estimar la amplificación del movimiento sísmico utilizando registros instrumentales y características del terreno. Su principal contribución al presente proyecto es respaldar el uso de algoritmos de regresión no lineal y de la variable $V_{s30}$ para representar los efectos locales del suelo. Mientras Wang et al. emplean una amplia base de registros japoneses y obtienen su mejor desempeño con XGBoost, este proyecto utiliza registros acelerográficos de Lima y un modelo GBT implementado con Spark ML. Además, integra la amplificación estimada con las características de las edificaciones y las curvas de fragilidad para evaluar el daño potencial ante distintos escenarios sísmicos.
+\textbf{Aporte a la investigación:} Este trabajo demuestra la utilidad de los modelos basados en árboles para estimar la amplificación del movimiento sísmico utilizando registros instrumentales y características del terreno. Su principal contribución al presente proyecto es respaldar el uso de algoritmos de regresión no lineal y de la variable $V_{s30}$ para representar los efectos locales del suelo. Mientras Wang et al. emplean una amplia base de registros japoneses y obtienen su mejor desempeño con XGBoost, este proyecto utiliza registros acelerográficos de Lima y un modelo GBT implementado con Spark ML. 
+Además, integra la amplificación estimada con las características de las edificaciones y las curvas de fragilidad para evaluar daños potenciales.
 
 % ---------------------------------------------------------------------
 
@@ -492,37 +468,10 @@ En relación con la presente investigación, desarrollada sobre edificaciones de
 Asimismo, el estudio evidencia que la calidad, disponibilidad y actualización de los datos constituyen limitaciones importantes para la confiabilidad de las estimaciones. Aunque no implementa una arquitectura Big Data distribuida, proporciona una base metodológica para justificar la integración de fuentes oficiales, la ingeniería de variables y la generación de información geoespacial mediante modelos de aprendizaje automático.
 
 
-% ---------------------------------------------------------------------
-\begin{table*}[!t]
-\centering
-\caption{Comparación de los trabajos revisados}
-\label{tab:comparativa}
-\footnotesize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.3cm} Y Y Y Y}
-\toprule
-\textbf{Trabajo} & \textbf{Problema} & \textbf{Base de datos} & \textbf{Técnicas y tecnologías} & \textbf{Resultado principal} \\
-\midrule
-Carpanese et al. \cite{carpanese2023} & Inspección manual costosa para evaluar vulnerabilidad & Imágenes satelitales y Street View & Visión por computadora, Machine Learning & Atributos de edificios (altura, material, época) extraídos automáticamente \\
-Fan et al. \cite{fan2021plsv} & Inspección e interpolación insuficientes para mapear vulnerabilidad & Campo en Yancheng + VIIRS, MODIS y Landsat-8 & SVR, Random Forest, interpolación espacial, SIG & PLSV con RMSE ${\approx}0.1$, mejor que la interpolación \\
-Gupta et al. \cite{gupta2019xbd} & Evaluación lenta del daño tras desastres & xBD: 22\,068 imágenes, 850\,736 edificios, 19 eventos & U-Net, ResNet-50, anotación experta & IoU de edificios 0.66; F1 de daño 0.27 \\
-Zhu et al. \cite{zhu2022quakeflow} & Volúmenes masivos de formas de onda & 3 años, 70 estaciones (Puerto Rico) y 66 (Hawái) & Kafka, Spark Streaming, Kubernetes, PhaseNet, GaMMA & $7.97\times$ y $10.47\times$ más eventos que los catálogos \\
-
-Izquierdo-Horna et al. (2022) \cite{izquierdo2022pisco} &
-Evaluación del riesgo sísmico mediante la integración de datos territoriales, geológicos y socioeconómicos en Pisco, Perú &
-Datos geoespaciales de SRTM, INGEMMET, INEI, INDECI y CISMID &
-Random Forest, AHP, QGIS y validación cruzada &
-Exactitud de 0.99 en la clasificación del peligro sísmico; el tipo de suelo fue la variable más importante (62.3\,\%) \\
- \\
-\midrule
-\textbf{Este trabajo} & Daño sísmico heterogéneo por suelo y resonancia & 16 fuentes abiertas (Tabla~\ref{tab:datos}) & Spark, Delta Lake, Spark ML, Structured Streaming, H3, MLflow & Demanda y daño de 3.1~M edificios de Lima y el Callao; onda P con AUC 0.966 y daño con AUC 0.672; validación externa en Turquía 2023 \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
 % =====================================================================
-\section{Propuesta metodológica}\label{sec:propuesta}
+\section{Metodología aplicada}\label{sec:metodologia}
 % =====================================================================
+La metodología se organiza en cuatro bloques: el fundamento físico que relaciona onda, suelo y edificio; las fuentes de datos; la arquitectura de Big Data que las procesa; y la cadena de cálculo con sus modelos, su validación y su versión en tiempo real (Fig.~\ref{fig:arquitectura}).
 
 \subsection{Fundamento físico}
 La demanda sísmica sobre una edificación depende de tres factores que se cruzan: la \emph{onda}, el \emph{suelo} y el \emph{edificio}. La onda se describe con el espectro de respuesta $S_a(T)$, que indica cuánto se acelera un oscilador de un grado de libertad de periodo $T$ y amortiguamiento  $\xi=0.05$:
@@ -537,7 +486,7 @@ T_b=\frac{h}{C_T},\qquad C_T=\begin{cases}60 & N<5\\45 & N\geq5\end{cases}\quad[
 \end{equation}
 El cociente $T_b/T_P$ se usa como \textbf{índice de resonancia}: cuando se acerca a 1, el edificio vibra en el rango de periodos que el suelo más amplifica.
 
-\subsection{Bases de datos}
+\subsection{Fuentes de datos}
 El proyecto integra 16 fuentes abiertas y heterogéneas (Tabla~\ref{tab:datos}), con 4.26~GB en 519 archivos en el Volume \texttt{landing}. Las dos fuentes de Turquía solo validan: no entrenan ni recalibran ningún modelo.
 
 \begin{table*}[!t]
@@ -595,129 +544,18 @@ Callao 2025, M6.1 & 32 & 0.304 & 0.115 & 57 & 49 \\
 \fuente{Elaboración propia con \texttt{silver\_eventos}. $R$: distancia hipocentral.}
 \end{table}
 
-\subsection{Arquitectura y tecnologías de Big Data}
-El sistema se implementa como un \emph{lakehouse} con arquitectura medallón (Fig.~\ref{fig:arquitectura}) sobre \textbf{Apache Spark} \cite{zaharia2016spark} y \textbf{Delta Lake} \cite{armbrust2020delta}, en Databricks Free Edition (\emph{serverless}), con Unity Catalog y Volumes. Delta Lake aporta transacciones ACID, control de esquema y versionado (\emph{time travel}) sobre archivos Parquet. Bronze guarda cada fuente sin transformar, con columnas de linaje. Silver limpia y tipifica: lo que no pasa las reglas va a cuarentena con su motivo y queda en \texttt{silver\_calidad\_log} (244\,750 registros). Gold unifica los registros de las tres ciudades y los edificios de Lima y el Callao. Sobre Gold se preparan las variables, se entrenan los modelos con Spark ML \cite{meng2016mllib} y se calcula el riesgo. La Tabla~\ref{tab:spark} detalla las técnicas de Spark usadas.
+\subsection{Arquitectura y flujo en Databricks}
+El sistema es un \emph{lakehouse} con arquitectura medallón sobre \textbf{Apache Spark} \cite{zaharia2016spark} y \textbf{Delta Lake} \cite{armbrust2020delta}, en Databricks Free Edition (\emph{serverless}), con Unity Catalog y Volumes. Delta Lake aporta transacciones ACID, control de esquema y versionado (\emph{time travel}). Bronze guarda cada fuente sin transformar, con columnas de linaje; Silver limpia y tipifica, y lo que no pasa las reglas va a cuarentena y queda en \texttt{silver\_calidad\_log} (244\,750 registros); Gold unifica los registros de las tres ciudades y los edificios de Lima y el Callao.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig_metodologia_color.pdf}
-\caption{Propuesta metodológica: fuentes abiertas, lakehouse medallón en Databricks, modelado físico y de aprendizaje automático, resultados y validación en cada etapa.}
+\caption{Metodología aplicada: fuentes abiertas, lakehouse medallón en Databricks, modelado físico y de aprendizaje automático, resultados y validación en cada etapa.}
 \label{fig:arquitectura}
 \fuente{Elaboración propia.}
 \end{figure*}
 
-\subsection{Cadena de cálculo}
-\textbf{a) Señal.} Cada acelerograma se procesa en paralelo con \texttt{mapInPandas}: corrección de línea base, ventana de Tukey del 5\,\%, filtro Butterworth pasa-banda de 0.1 a 25~Hz (orden 4, fase cero) y conversión de cm/s$^2$ a $g$. Luego se calculan $PGA$, $PGV$ y $S_a(T)$ en 50 periodos logarítmicamente espaciados entre 0.05 y 4~s, con una solución exacta por tramos lineales, equivalente al método de Nigam y Jennings \cite{nigam1969}. Las dos componentes horizontales se combinan con la media geométrica, $S_a^{GEO}=\sqrt{S_a^{EW}\,S_a^{NS}}$. La Tabla~\ref{tab:eventos} resume los sismos procesados.
-
-\textbf{b) Territorio.} De las 3\,200\,050 huellas de Bronze quedan 3\,124\,035 edificios (2\,847\,057 en Lima y 276\,978 en el Callao), tras recortar por los 48 distritos de estudio, exigir una confianza mínima y eliminar duplicados. Cada edificio recibe su celda H3 (resoluciones 9 y 8), su $\vs$ interpolado, su perfil E.030 y la altura mediana de las capas 2016--2023 dentro de su huella. Con esa altura se estiman los pisos (Sección~\ref{sec:modelos_impl}) y, con la Ec.~\eqref{eq:tb}, $T_b$ y $T_b/T_P$.
-
-\textbf{c) Amplificación del suelo.} Con las ondas de Lima se retira el efecto de la distancia hipocentral $R$ y el término de cada sismo $\eta_{ev}(T)$:
-\begin{equation}
-\ln F(T,\vs)=\ln\!\big(S_a(T)\,R\big)-\eta_{ev}(T).
-\label{eq:amplificacion}
-\end{equation}
-Un modelo de regresión en Spark ML estima $\ln F$ a partir de $\ln T$, $\ln\vs$ y el perfil E.030.
-
-\textbf{d) Demanda en cada edificio.} En cada sismo se retira el efecto del suelo en las estaciones para obtener el movimiento en roca, que se interpola con \emph{kriging} ordinario a 2\,356 celdas H3 de resolución 8. Después se amplifica con el suelo de cada edificio, con el término de sitio de las estaciones interpolado a su celda ($\delta_b$) y el término no lineal $f_{nl}$ de BSSA14 \cite{boore2014}:
-\begin{equation}
-\begin{aligned}
-S_a^{roca}(T)&=S_a^{est}(T)\,/\,\big[F(T,V_{s30}^{est})\,e^{\delta_{est}(T)}\big],\\
-S_a^{sitio}(T)&=S_a^{roca}(T)\,F(T,V_{s30}^{b})\,e^{\delta_b(T)}\,f_{nl}.
-\end{aligned}
-\label{eq:demanda}
-\end{equation}
-La demanda $S_a(T_b)$ se obtiene interpolando en $\log T$. Con 9 escenarios (Sección~\ref{sec:modelos_impl}) resultan $3\,124\,035\times9=28\,116\,315$ filas.
-
-\textbf{e) Daño.} Los edificios de 5 o más pisos se consideran de concreto armado. Los de pocos pisos se reparten según la proporción de paredes del Censo 2017 de su distrito (adobe, quincha o madera), y el resto se considera albañilería confinada. A cada uno se aplican las \textbf{curvas de fragilidad lognormales} del modelo GEM \cite{martins2021}, según su tipología y altura:
-\begin{equation}
-P\!\left(DS\geq ds \mid IM\right)=\Phi\!\left(\frac{\ln\!\left(IM/\theta_{ds}\right)}{\beta_{ds}}\right),
-\label{eq:fragilidad}
-\end{equation}
-donde $IM$ es la intensidad que usa cada curva ($PGA$ o $S_a$ a 0.3, 0.6 o 1.0~s), y $\theta_{ds}$ y $\beta_{ds}$ son la mediana y la dispersión del estado de daño $ds$. De ahí salen la probabilidad de colapso $P_{col}$ y el daño esperado en una escala de 0 a 4, que se agregan por distrito y por hexágono H3.
-
-\textbf{f) Modelos de daño y perfiles.} Un clasificador de Spark ML, cuyo champion es un Random Forest \cite{breiman2001rf}, aprende del daño observado en Tainan y Manta. KMeans agrupa los edificios de Lima y el Callao en perfiles de riesgo y elige $k$ por el coeficiente de silueta.
-
-\subsection{Validación}
-Lima no tiene daño observado, de modo que allí se mira el comportamiento del modelo y no su acierto. La validación con daño real se hace entre Tainan (sismo de Meinong de 2016) y Manta (sismo de Ecuador de 2016): el modelo se entrena en una ciudad y se prueba en la otra. La demanda se valida dejando una estación fuera, y los pisos, frente a OpenStreetMap y a edificios con pisos publicados. Como validación externa, las mismas curvas GEM y el champion de daño se aplican a los edificios con daño observado tras el sismo de Turquía de 2023, con la sacudida del ShakeMap del USGS en cada edificio, por edificio y por zonas de unos 500~m. Turquía no se usa para entrenar ni para recalibrar.
-
-\subsection{Procesamiento en tiempo real}
-El flujo de velocidad usa \textbf{Spark Structured Streaming} sobre una tabla Delta que hace de tópico, en lugar de Apache Kafka \cite{kreps2011kafka}. Un productor inserta en lotes de 10~s acelerogramas estocásticos \cite{boore2003} de $M$6.1, 7.5 y 8.0, con el epicentro de Callao 2025 y dos componentes horizontales y una vertical en cada uno de los 48 distritos. El modelo estocástico se calibra en la tarea 07 con los registros de Lima; la tarea de tiempo real solo hace inferencia, sin entrenar ni ajustar nada. Cada sismo simulado recorre la misma cadena que los datos históricos:
-\begin{itemize}
-  \item \textbf{Onda P:} una consulta arma ventanas de 4~s cada 0.5~s con las tres componentes, calcula los mismos rasgos que en STEAD y aplica el champion GBT en cada micro-lote. STA/LTA \cite{allen1978} (0.5 y 5~s, umbral 4) queda como referencia.
-  \item \textbf{Amplificación:} la señal en roca pasa al suelo de cada distrito con $F(T,\vs)$ del champion y el término no lineal de BSSA14.
-  \item \textbf{Edificios:} la demanda de cada edificio pasa por las curvas GEM, con la misma tipología que en la cadena histórica, y por el champion de daño.
-\end{itemize}
-Las salidas se guardan en un esquema aparte, \texttt{tiempo\_real}.
-
-\subsection{Visualización}
-Una \textbf{Databricks App} (Flask y Leaflet) publica un mapa web con distritos, hexágonos H3, edificios, validación de pisos con OpenStreetMap, grilla de suelo y estaciones. Tiene filtros por capa, distrito, métrica, escenario y color. Cada corrida del job deja sus datos en el Volume \texttt{web} y la app los recarga sola. Las Figs.~\ref{fig:mapa_general} y~\ref{fig:mapa_edificio} muestran la vista por hexágono y el detalle por edificio.
-
-\subsection{Las 5V del Big Data}
-La Tabla~\ref{tab:5v} muestra cómo el proyecto responde a las cinco dimensiones del Big Data.
-
-\begin{table}[!t]
-\centering
-\caption{Las 5V del Big Data en el proyecto}
-\label{tab:5v}
-\footnotesize
-\renewcommand{\arraystretch}{1.12}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{1.45cm} Y}
-\toprule
-\textbf{V} & \textbf{Evidencia} \\
-\midrule
-Volumen & 4.26~GB crudos en 519 archivos; 3.2~M huellas; 95 tablas; 28.1~M filas de demanda y otras tantas de daño; 9.6~M filas de daño en la simulación. \\
-Velocidad & Structured Streaming en lotes de 10~s con el detector de onda P en cada micro-lote; todavía unas 8 veces más lento que la señal. \\
-Variedad & Texto, netCDF, GeoTIFF, CSV, GeoJSON, JSON, PDF, HDF5, XLSX, Shapefile y XML. \\
-Veracidad & Linaje, cuarentena, \texttt{silver\_calidad\_log} (244\,750 registros), validación dejando una estación fuera, contraste de pisos con OpenStreetMap y validación externa con el daño de Turquía 2023. \\
-Valor & Ranking de 48 distritos, perfiles de riesgo de 3.1~M edificios y mapa web para priorizar la gestión del riesgo. \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsection{Limitaciones}
-\begin{itemize}
-  \item Los sismos registrados en Lima son moderados ($PGA\leq0.30\,g$); por ello se escalan a 0.25, 0.45 y 0.70~$g$ y se comparan con el espectro de la E.030.
-  \item Lima no tiene daño observado, y el modelo de daño se apoya en solo 184 edificios de otras dos ciudades. El $PGV$ y $S_a(1.0\,\mathrm{s})$ de Lima quedan fuera de su rango de entrenamiento.
-  \item El $\vs$ del USGS deriva de la pendiente topográfica, con cerca de 1~km de resolución, y no capta la vulnerabilidad de la vivienda informal de la periferia. Solo el 4.2\,\% de los edificios queda por debajo de 300~m/s.
-  \item La amplificación se ajusta con 49 estaciones, y $F(T,\vs)$ no resulta suave.
-  \item La altura 2.5D tiene 4~m de resolución efectiva: 244\,736 edificios (7.8\,\%) no tienen altura y sus pisos se imputan con la mediana de su celda H3, y los edificios altos son los peor estimados.
-  \item La tipología se asigna con el censo distrital y los pisos, porque no existe un catastro abierto, y $T_b=h/C_T$ es una aproximación normativa.
-  \item El área cubre 48 distritos: Pueblo Libre y Mi Perú no se incluyeron en la lista de estudio.
-  \item En Turquía, la etiqueta visual de daño y el nivel de daño del estudio de origen se contradicen por zonas en Antakya, y el ShakeMap tiene cerca de 1~km de resolución: se puede validar el nivel de daño de cada ciudad, pero no el orden entre edificios vecinos.
-\end{itemize}
-
-% =====================================================================
-\section{Metodología implementada}\label{sec:metodologia}
-% =====================================================================
-Esta sección describe el flujo tal como quedó construido y ejecutado en Databricks. La Tabla~\ref{tab:cambios} resume en qué cambió respecto del plan inicial del proyecto.
-
-\begin{table}[!t]
-\centering
-\caption{Cambios entre el plan inicial y el sistema implementado}
-\label{tab:cambios}
-\footnotesize
-\renewcommand{\arraystretch}{1.1}
-\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{1.55cm} >{\raggedright\arraybackslash}p{2.0cm} Y}
-\toprule
-\textbf{Aspecto} & \textbf{Plan inicial} & \textbf{Implementado} \\
-\midrule
-Entorno & Spark local & Databricks Free Edition (\emph{serverless}), Unity Catalog y Volumes \\
-Área & 49 distritos, 1.92~M edificios & 48 distritos de Lima y el Callao, 3\,124\,035 edificios \\
-Fuentes & 11, con xBD, Maxar y ShakeMap de Turquía & 16, con Tainan, Manta, censo, OSM, BSSA14, GEM, y el daño y el ShakeMap de Turquía solo para validar \\
-Datos crudos & ${\sim}55$~GB & 4.26~GB en 519 archivos \\
-Sismos & 5 & 4 procesados (99 registros); Ica 2026 queda reservado para simular un lote nuevo \\
-STEAD & 200\,000 trazas & Muestra de 10\,000 trazas \\
-Amplificación & Random Forest & 4 regresores comparados; gana GBT \cite{friedman2001} \\
-Daño & Curvas de Sudamérica; U-Net en Turquía & Curvas GEM \cite{martins2021}; Random Forest con daño observado en Tainan y Manta \cite{pujol2017,sim2017}; Turquía como validación externa \\
-Periodo $T_b$ & $0.1\,N$ & $h/C_T$ de la E.030 ($C_T=60$ o 45) \\
-Tiempo real & Kafka y detector de onda P & Tabla Delta como tópico y Structured Streaming; el champion GBT detecta la onda P (STA/LTA de referencia) y la misma simulación pasa por la amplificación y el daño \\
-Visualización & Streamlit y Kepler.gl & Databricks App (Flask y Leaflet) \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsection{Flujo completo}
-El flujo es el job \texttt{sismos\_pipeline} de Databricks Workflows, con 12 tareas (Fig.~\ref{fig:flujo}) y cuatro parámetros: \texttt{fecha\_desde}, \texttt{fecha\_hasta}, \texttt{forzar\_recalibrado} y \texttt{recargar\_maestros}. El grafo no es lineal: tras las variables se ramifica en el detector de onda P y la amplificación, y tras la demanda, en el daño y los perfiles; el riesgo en Lima alimenta en paralelo la simulación en tiempo real y el mapa. Un cuaderno aparte simula la llegada de cada sismo copiándolo del Volume \texttt{fuente} a \texttt{landing}. Los resultados quedan en 95 tablas Delta: 88 en el esquema \texttt{grupo06proyectofinal.sismos} (29 Bronze, 24 Silver, 8 Gold, 6 de variables, 3 de control de modelos y 18 de riesgo) y 7 de la simulación en \texttt{grupo06proyectofinal.tiempo\_real}. La simulación tiene su propio esquema porque la edición gratuita admite 100 tablas por esquema. La Tabla~\ref{tab:pasos} resume cada paso.
+El flujo se ejecuta como el job \texttt{sismos\_pipeline} de Databricks Workflows, con 12 tareas (Fig.~\ref{fig:flujo}) y cuatro parámetros: \texttt{fecha\_desde}, \texttt{fecha\_hasta}, \texttt{forzar\_recalibrado} y \texttt{recargar\_maestros}. Tras Bronze, Silver, Gold y la preparación de variables, el grafo se ramifica en el detector de onda P y la amplificación; tras la demanda, en el daño y los perfiles; y el riesgo alimenta en paralelo la simulación en tiempo real y el mapa. Un cuaderno aparte simula la llegada de cada sismo copiándolo del Volume \texttt{fuente} a \texttt{landing}. Los resultados quedan en 95 tablas Delta: 88 en \texttt{grupo06proyectofinal.sismos} y 7 de la simulación en \texttt{grupo06proyectofinal.tiempo\_real}, porque la edición gratuita admite 100 tablas por esquema.
 
 \begin{figure}[!t]
 \centering
@@ -727,32 +565,7 @@ El flujo es el job \texttt{sismos\_pipeline} de Databricks Workflows, con 12 tar
 \fuente{Elaboración propia.}
 \end{figure}
 
-\begin{table*}[!t]
-\centering
-\caption{Paso a paso del flujo}
-\label{tab:pasos}
-\footnotesize
-\renewcommand{\arraystretch}{1.08}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.0cm} Y >{\raggedright\arraybackslash}p{4.9cm}}
-\toprule
-\textbf{Tarea} & \textbf{Qué hace} & \textbf{Salida principal (filas)} \\
-\midrule
-01 Bronze & Lee los archivos con Spark (\texttt{binaryFile}, CSV, JSON, texto), agrega linaje y guarda sin transformar. Reemplaza cada sismo con \texttt{replaceWhere}; los maestros, solo si se piden. Lee también los shapefiles y el ShakeMap de Turquía. & 99 registros CISMID, 3\,200\,050 huellas, 10\,000 trazas STEAD, 51\,637 registros de daño de Turquía \\
-02 Silver & \emph{Ondas:} línea base, filtro Butterworth de 0.1--25~Hz, $PGA$, $PGV$ y $S_a(T)$ en 50 periodos, con \texttt{MERGE} y cuarentena. \emph{Territorio:} 48 distritos, $\vs$ interpolado, perfil E.030, H3, altura mediana 2016--2023 por huella, pisos y $T_b$. \emph{STEAD:} ventanas de 4~s y llegadas P con STA/LTA \cite{allen1978}. \emph{Turquía:} edificios con daño y malla del ShakeMap. & \texttt{silver\_edificios} 3\,124\,035; \texttt{silver\_espectros} 19\,800; \texttt{silver\_stead\_ventanas} 35\,223 \\
-03 Gold & Unifica registros de Lima, Tainan y Manta; agrega a cada edificio la tipología del Censo 2017 de su distrito \cite{inei_censo2017}; deja los edificios de Turquía con su daño y la malla del ShakeMap. & \texttt{gold\_edificios} 3\,124\,035; \texttt{gold\_registros} 212; \texttt{gold\_turquia\_edificios} 24\,094 \\
-04 Variables & Define los \emph{targets}, excluye columnas con fuga, descarta pares con $|r|>0.90$, selecciona con \texttt{UnivariateFeatureSelector} ($p<0.05$) y marca el \emph{holdout}. & \texttt{fe\_clasificacion} 35\,223; \texttt{fe\_regresion} 4\,950 \\
-05--06 ML & Entrenan y comparan los detectores de onda P y los modelos de amplificación (Sección~\ref{sec:modelos_impl}). & Champion GBT en ambos casos \\
-07 Demanda & Usa el champion para obtener $F(T,\vs)$; suma el término de sitio; krigea la roca a 2\,356 celdas H3; corrige la no linealidad \cite{boore2014}; aplica las curvas GEM a 9 escenarios. Valida las curvas con el daño de Turquía y calibra el acelerograma sintético que usa la tarea 11. & \texttt{riesgo\_demanda} y \texttt{riesgo\_dano\_edificios} 28\,116\,315 cada una; \texttt{fe\_dano} 184; \texttt{fe\_clustering} 3\,124\,035; \texttt{gold\_turquia\_edificios} 24\,094 \\
-08--09 ML & Entrenan y comparan los modelos de daño y los perfiles de riesgo; el champion de daño también se evalúa en Turquía. & Champion Random Forest y KMeans ($k=7$) \\
-10 Riesgo & Aplica ambos modelos en Lima y el Callao y agrega por distrito y hexágono. Compacta las tablas grandes con \texttt{OPTIMIZE ZORDER}. & \texttt{riesgo\_h3} 21\,204; \texttt{riesgo\_ranking\_distritos} 432; \texttt{riesgo\_efecto\_lima} 288 \\
-11 Tiempo real & Solo inferencia. Genera acelerogramas estocásticos \cite{boore2003} de $M$6.1, 7.5 y 8.0 con tres componentes por distrito; en lotes de 10~s detecta la onda P con el champion GBT (STA/LTA de referencia), pasa la señal al suelo con el champion de amplificación y estima el daño de cada edificio con GEM y el champion de daño. Escribe en el esquema \texttt{tiempo\_real}. & \texttt{sismo\_acelerogramas} 547\,961; \texttt{sismo\_onda\_p\_ventanas} 9\,866; \texttt{sismo\_dano\_edificios} 9\,553\,041; \texttt{sismo\_efecto\_distritos} 144 \\
-12 Mapa & Prepara el JSON del mapa en el Volume \texttt{web}; la app lo recarga sola. & Mapa web con distritos, hexágonos H3, edificios, suelo y estaciones \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-\subsection{Tecnologías de Spark}
-La Tabla~\ref{tab:spark} indica qué técnica se usa en cada parte. Señales, edificios y modelos se procesan en los \emph{workers}. En el \emph{driver} quedan solo el ajuste del modelo de pisos, la malla $F(T,\vs)$ (4\,300 filas), el cálculo de PSI, los gráficos y el armado del JSON del mapa. Como \emph{serverless} no admite \texttt{cache()}, los resultados intermedios se guardan en tablas temporales.
+La Tabla~\ref{tab:spark} indica qué técnica de Spark se usa en cada parte. Señales, edificios y modelos se procesan en los \emph{workers}; en el \emph{driver} quedan solo el ajuste del modelo de pisos, la malla $F(T,\vs)$, el cálculo de PSI y el armado del JSON del mapa. Como \emph{serverless} no admite \texttt{cache()}, los resultados intermedios se guardan en tablas temporales.
 
 \begin{table}[!t]
 \centering
@@ -778,8 +591,37 @@ Workflows, Volumes y Apps & Orquestación, archivos y publicación del mapa. \\
 \end{tabularx}
 \end{table}
 
-\subsection{Modelos}\label{sec:modelos_impl}
-La Tabla~\ref{tab:modelos_impl} resume los cuatro modelos de Spark ML. Todos siguen el mismo ciclo: (1) cargan el champion; (2) lo monitorean con PSI ($\geq0.20$ en al menos 2 variables) y con su métrica; (3) si hay que recalibrar, entrenan los candidatos con semilla fija; (4) promueven al challenger solo si mejora lo suficiente (AUC $+0.01$, RMSE $-5\,\text{\%}$ o silueta $+0.02$); y (5) registran el resultado en \texttt{ml\_registro\_modelos} y MLflow.
+\subsection{Cadena de cálculo}
+\textbf{a) Señal.} Cada acelerograma se procesa en paralelo con \texttt{mapInPandas}: corrección de línea base, ventana de Tukey del 5\,\%, filtro Butterworth pasa-banda de 0.1 a 25~Hz (orden 4, fase cero) y conversión de cm/s$^2$ a $g$. Luego se calculan $PGA$, $PGV$ y $S_a(T)$ en 50 periodos logarítmicamente espaciados entre 0.05 y 4~s, con una solución exacta por tramos lineales, equivalente al método de Nigam y Jennings \cite{nigam1969}. Las dos componentes horizontales se combinan con la media geométrica, $S_a^{GEO}=\sqrt{S_a^{EW}\,S_a^{NS}}$. La Tabla~\ref{tab:eventos} resume los sismos procesados.
+
+\textbf{b) Territorio.} De las 3\,200\,050 huellas de Bronze quedan 3\,124\,035 edificios (2\,847\,057 en Lima y 276\,978 en el Callao), tras recortar por los 48 distritos de estudio, exigir una confianza mínima y eliminar duplicados. Cada edificio recibe su celda H3 (resoluciones 9 y 8), su $\vs$ interpolado, su perfil E.030 y la altura mediana de las capas 2016--2023 dentro de su huella. Los pisos se estiman con \emph{gradient boosting} monótono hasta 40~m y una recta para las torres, ajustados con pisos de OpenStreetMap \cite{osm} y edificios con pisos publicados; si OpenStreetMap trae pisos compatibles con la altura, se usa ese valor (1\,814 edificios) y los incompatibles se descartan (58). Con los pisos y la Ec.~\eqref{eq:tb} se obtienen $T_b$ y $T_b/T_P$.
+
+\textbf{c) Amplificación del suelo.} Con las ondas de Lima se retira el efecto de la distancia hipocentral $R$ y el término de cada sismo $\eta_{ev}(T)$:
+\begin{equation}
+\ln F(T,\vs)=\ln\!\big(S_a(T)\,R\big)-\eta_{ev}(T).
+\label{eq:amplificacion}
+\end{equation}
+Un modelo de regresión en Spark ML estima $\ln F$ a partir de $\ln T$, $\ln\vs$ y el perfil E.030.
+
+\textbf{d) Demanda en cada edificio.} En cada sismo se retira el efecto del suelo en las estaciones para obtener el movimiento en roca, que se interpola con \emph{kriging} ordinario a 2\,356 celdas H3 de resolución 8. Después se amplifica con el suelo de cada edificio, con el término de sitio de las estaciones interpolado a su celda ($\delta_b$) y el término no lineal $f_{nl}$ de BSSA14 \cite{boore2014}:
+\begin{equation}
+\begin{aligned}
+S_a^{roca}(T)&=S_a^{est}(T)\,/\,\big[F(T,V_{s30}^{est})\,e^{\delta_{est}(T)}\big],\\
+S_a^{sitio}(T)&=S_a^{roca}(T)\,F(T,V_{s30}^{b})\,e^{\delta_b(T)}\,f_{nl}.
+\end{aligned}
+\label{eq:demanda}
+\end{equation}
+La demanda $S_a(T_b)$ se obtiene interpolando en $\log T$. Se evalúan 9 escenarios: 3 sismos registrados, 2 escalados a 0.45~$g$, Callao 2025 escalado a 0.25 y 0.70~$g$, el espectro de la E.030 y ese mismo espectro con la amplificación medida (\texttt{e030\_sitio}); resultan $3\,124\,035\times9=28\,116\,315$ filas.
+
+\textbf{e) Daño.} Los edificios de 5 o más pisos se consideran de concreto armado. Los de pocos pisos se reparten según la proporción de paredes del Censo 2017 de su distrito (adobe, quincha o madera), y el resto se considera albañilería confinada. A cada uno se aplican las \textbf{curvas de fragilidad lognormales} del modelo GEM \cite{martins2021}, según su tipología y altura:
+\begin{equation}
+P\!\left(DS\geq ds \mid IM\right)=\Phi\!\left(\frac{\ln\!\left(IM/\theta_{ds}\right)}{\beta_{ds}}\right),
+\label{eq:fragilidad}
+\end{equation}
+donde $IM$ es la intensidad que usa cada curva ($PGA$ o $S_a$ a 0.3, 0.6 o 1.0~s), y $\theta_{ds}$ y $\beta_{ds}$ son la mediana y la dispersión del estado de daño $ds$. De ahí salen la probabilidad de colapso $P_{col}$ y el daño esperado en una escala de 0 a 4, que se agregan por distrito y por hexágono H3. La incertidumbre de la demanda se suma a la de la curva, $\Phi\big(\ln(IM/\theta)/\sqrt{\beta^{2}+\sigma^{2}}\big)$, con $\sigma=0.479$ en los escenarios de sismo, 0.573 en \texttt{e030\_sitio} y 0 en el espectro de la E.030.
+
+\subsection{Modelos de aprendizaje automático}
+Se entrenan cuatro modelos con Spark ML \cite{meng2016mllib} (Tabla~\ref{tab:modelos_impl}): el detector de onda P y la amplificación comparan regresión logística o lineal, árboles, Random Forest \cite{breiman2001rf} y GBT \cite{friedman2001}; el clasificador de daño aprende del daño observado en Tainan y Manta \cite{pujol2017,sim2017}; y KMeans agrupa los edificios en perfiles de riesgo, con $k$ elegido por la silueta. Todos siguen el mismo ciclo: cargan el champion, lo monitorean con PSI ($\geq0.20$ en al menos 2 variables) y con su métrica, y si hay que recalibrar entrenan los candidatos con semilla fija y promueven al challenger solo si mejora lo suficiente (AUC $+0.01$, RMSE $-5\,\text{\%}$ o silueta $+0.02$). Cada resultado se registra en \texttt{ml\_registro\_modelos} y en MLflow.
 
 \begin{table*}[!t]
 \centering
@@ -799,7 +641,32 @@ Perfiles & Sin objetivo; 3\,124\,035 edificios en el escenario \texttt{e030\_sit
 \end{tabularx}
 \end{table*}
 
-Los pisos se estiman fuera de Spark ML, con gradient boosting monótono hasta 40~m y una recta para las torres, ajustados con pisos de OpenStreetMap \cite{osm} y edificios con pisos publicados. Cuando un edificio tiene pisos en OpenStreetMap compatibles con su altura, se usa ese valor (1\,814 edificios); los incompatibles se descartan (58). La demanda combina componentes físicos: \emph{kriging} ordinario con variograma exponencial, el término de sitio de las estaciones interpolado a cada celda y el término no lineal de BSSA14 \cite{boore2014}. El daño usa las curvas GEM por tipología y altura, con la incertidumbre de la demanda sumada a la de la curva en la Ec.~\eqref{eq:fragilidad}: $\Phi\big(\ln(IM/\theta)/\sqrt{\beta^{2}+\sigma^{2}}\big)$, con $\sigma=0.479$ en los escenarios de sismo, 0.573 en \texttt{e030\_sitio} y 0 en el espectro de la E.030. Los 9 escenarios son 3 sismos registrados, 2 escalados a 0.45~$g$, Callao 2025 escalado a 0.25 y 0.70~$g$, el espectro de la E.030 y ese mismo espectro con la amplificación medida (\texttt{e030\_sitio}).
+\subsection{Procesamiento en tiempo real}
+El flujo de velocidad usa \textbf{Spark Structured Streaming} sobre una tabla Delta que hace de tópico, en lugar de Apache Kafka \cite{kreps2011kafka}. Un productor inserta en lotes de 10~s acelerogramas estocásticos \cite{boore2003} de $M$6.1, 7.5 y 8.0, con el epicentro de Callao 2025 y tres componentes en cada uno de los 48 distritos; el modelo estocástico se calibra en la tarea de demanda y esta tarea solo hace inferencia. Cada sismo simulado recorre la misma cadena que los datos históricos: ventanas de 4~s cada 0.5~s con el champion GBT para detectar la onda P (STA/LTA \cite{allen1978} como referencia), paso de la señal al suelo de cada distrito con $F(T,\vs)$ y BSSA14, y daño de cada edificio con las curvas GEM y el champion de daño. Las salidas se guardan en el esquema \texttt{tiempo\_real}.
+
+\subsection{Validación y visualización}
+Lima no tiene daño observado, de modo que allí se mira el comportamiento del modelo y no su acierto. El daño se valida entre Tainan (Meinong 2016) y Manta (Ecuador 2016), entrenando en una ciudad y probando en la otra; la demanda, dejando una estación fuera; y los pisos, frente a OpenStreetMap y edificios con pisos publicados. Como validación externa, las curvas GEM y el champion de daño se aplican a los edificios con daño observado tras el sismo de Turquía de 2023, con la sacudida del ShakeMap del USGS, sin usar Turquía para entrenar ni recalibrar.
+
+Los resultados se publican en una \textbf{Databricks App} (Flask y Leaflet) con distritos, hexágonos H3, edificios, validación de pisos, grilla de suelo y estaciones, filtrables por capa, distrito, métrica y escenario. Cada corrida del job deja sus datos en el Volume \texttt{web} y la app los recarga sola (Figs.~\ref{fig:mapa_general} y~\ref{fig:mapa_edificio}). La Tabla~\ref{tab:5v} resume cómo el proyecto responde a las cinco dimensiones del Big Data.
+
+\begin{table}[!t]
+\centering
+\caption{Las 5V del Big Data en el proyecto}
+\label{tab:5v}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\columnwidth}{>{\raggedright\arraybackslash}p{1.45cm} Y}
+\toprule
+\textbf{V} & \textbf{Evidencia} \\
+\midrule
+Volumen & 4.26~GB crudos en 519 archivos; 3.2~M huellas; 95 tablas; 28.1~M filas de demanda y otras tantas de daño; 9.6~M filas de daño en la simulación. \\
+Velocidad & Structured Streaming en lotes de 10~s con el detector de onda P en cada micro-lote; todavía unas 8 veces más lento que la señal. \\
+Variedad & Texto, netCDF, GeoTIFF, CSV, GeoJSON, JSON, PDF, HDF5, XLSX, Shapefile y XML. \\
+Veracidad & Linaje, cuarentena, \texttt{silver\_calidad\_log} (244\,750 registros), validación dejando una estación fuera, contraste de pisos con OpenStreetMap y validación externa con el daño de Turquía 2023. \\
+Valor & Ranking de 48 distritos, perfiles de riesgo de 3.1~M edificios y mapa web para priorizar la gestión del riesgo. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 % =====================================================================
 \section{Resultados}\label{sec:resultados}
@@ -1109,6 +976,18 @@ El cuello de botella es la latencia: cada lote de 10~s de señal tarda unas 8 ve
 
 El acelerograma sintético, que se calibra en la tarea 07 y que la tarea 11 solo usa, también es débil: con un sismo excluido, el error va de 0.67 a 1.25 en $\ln$ según el evento (media cuadrática de 0.98, un factor cercano a 2.7) y el sesgo medio llega a 1.13 en Pisco 2007. Las cifras de Callao 2025 de la Tabla~\ref{tab:validacion} son optimistas porque ese sismo participó en el ajuste.
 
+\subsection{Limitaciones}\label{sec:limitaciones}
+\begin{itemize}
+  \item Los sismos registrados en Lima son moderados ($PGA\leq0.30\,g$); por ello se escalan a 0.25, 0.45 y 0.70~$g$ y se comparan con el espectro de la E.030.
+  \item Lima no tiene daño observado, y el modelo de daño se apoya en solo 184 edificios de otras dos ciudades. El $PGV$ y $S_a(1.0\,\mathrm{s})$ de Lima quedan fuera de su rango de entrenamiento.
+  \item El $\vs$ del USGS deriva de la pendiente topográfica, con cerca de 1~km de resolución, y no capta la vulnerabilidad de la vivienda informal de la periferia. Solo el 4.2\,\% de los edificios queda por debajo de 300~m/s.
+  \item La amplificación se ajusta con 49 estaciones, y $F(T,\vs)$ no resulta suave.
+  \item La altura 2.5D tiene 4~m de resolución efectiva: 244\,736 edificios (7.8\,\%) no tienen altura y sus pisos se imputan con la mediana de su celda H3, y los edificios altos son los peor estimados.
+  \item La tipología se asigna con el censo distrital y los pisos, porque no existe un catastro abierto, y $T_b=h/C_T$ es una aproximación normativa.
+  \item El área cubre 48 distritos: Pueblo Libre y Mi Perú no se incluyeron en la lista de estudio.
+  \item En Turquía, la etiqueta visual de daño y el nivel de daño del estudio de origen se contradicen por zonas en Antakya, y el ShakeMap tiene cerca de 1~km de resolución: se puede validar el nivel de daño de cada ciudad, pero no el orden entre edificios vecinos.
+\end{itemize}
+
 \subsection{Balance}
 \begin{itemize}
   \item \textbf{Sólido:} el flujo en Spark sobre 3.1~M edificios y 28~M filas por tabla de riesgo, su reproducibilidad, el detector de onda P en STEAD y en la simulación (144 de 144, con 0.22\,\% de falsas alarmas), la mejora del \emph{kriging} y de la cadena de demanda, y la respuesta coherente de las curvas de fragilidad.
@@ -1121,7 +1000,8 @@ El acelerograma sintético, que se calibra en la tarea 07 y que la tarea 11 solo
 \section{Conclusiones}\label{sec:conclusiones}
 % =====================================================================
 
-El estado del arte muestra que las imágenes satelitales permiten caracterizar edificaciones y detectar daños de forma automática \cite{carpanese2023,gupta2019xbd}, e incluso estimar la vulnerabilidad sísmica a nivel de píxel \cite{fan2021pIsv}. Asimismo, las arquitecturas escalables permiten procesar grandes volúmenes de registros sísmicos \cite{zhu2022quakeflow}. En el contexto peruano, se han aplicado algoritmos Random Forest y técnicas de análisis multicriterio para evaluar el riesgo sísmico en Pisco \cite{izquierdo2022pisco}, mientras que otros estudios han utilizado aprendizaje automático para estimar la amplificación del movimiento del suelo \cite{wang2023amp}. Sin embargo, estos enfoques no integran de manera conjunta el procesamiento distribuido, las características geotécnicas y la respuesta estructural de las edificaciones para estimar daños potenciales en Lima Metropolitana.
+El estado del arte muestra que las imágenes satelitales permiten caracterizar edificaciones y detectar daños de forma automática \cite{carpanese2023,gupta2019xbd}, e incluso estimar la vulnerabilidad sísmica a nivel de píxel 
+\cite{fan2021plsv}. Asimismo, las arquitecturas escalables permiten procesar grandes volúmenes de registros sísmicos \cite{zhu2022quakeflow}. En el contexto peruano, se han aplicado algoritmos Random Forest y técnicas de análisis multicriterio para evaluar el riesgo sísmico en Pisco \cite{izquierdo2022pisco}, mientras que otros estudios han utilizado aprendizaje automático para estimar la amplificación del movimiento del suelo \cite{wang2023amp}. Sin embargo, estos enfoques no integran de manera conjunta el procesamiento distribuido, las características geotécnicas y la respuesta estructural de las edificaciones para estimar daños potenciales en Lima Metropolitana.
 
 Este trabajo combina ambas líneas en un lakehouse medallón sobre Apache Spark y Delta Lake, ejecutado en Databricks. Un job de 12 tareas integra 16 fuentes, genera 95 tablas y lleva la demanda sísmica hasta 3\,124\,035 edificios de 48 distritos de Lima y el Callao, con resultados reproducibles y publicados en un mapa web. Su principal aporte es medir la amplificación con las propias ondas registradas en Lima y conectar onda, suelo y edificio en una sola cadena trazable, desde el archivo crudo hasta el ranking de distritos.
 
@@ -1237,7 +1117,13 @@ U.S. Geological Survey, ``ShakeMap del sismo M7.8 de Kahramanmara\c{s}, Turquía
 \bibitem{inei_censo2017}
 Instituto Nacional de Estadística e Informática (INEI), ``Censos Nacionales 2017: XII de Población, VII de Vivienda y III de Comunidades Indígenas,'' base REDATAM, 2018.
 
-\bibitem{izquierdo2022pisco} Izquierdo-Horna, L., et al. (2022). An integrated approach to seismic risk assessment using random forest and hierarchical analysis: Pisco, Peru. [Journal/Conference], [Volume], [Pages].
+
+\bibitem{izquierdo2022pisco}
+L. Izquierdo-Horna et al.,
+``An integrated approach to seismic risk assessment using random forest and hierarchical analysis: Pisco, Peru,''
+\emph{Heliyon}, vol. 8, no. 10, art. e10926, 2022,
+doi: 10.1016/j.heliyon.2022.e10926.
+
 \end{thebibliography}
 
 \end{document}
